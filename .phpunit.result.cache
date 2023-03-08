@@ -1,1 +1,1 @@
-{"version":1,"defects":[],"times":[]}
+{"version":1,"defects":{"Chriscreates\\Favicon\\Tests\\GenerateFaviconImagesTest::the_command_runs_without_failure":5},"times":{"Chriscreates\\Favicon\\Tests\\GenerateFaviconImagesTest::the_command_runs_without_failure":0.049}}

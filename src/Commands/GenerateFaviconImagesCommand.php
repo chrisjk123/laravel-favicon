@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Chriscreates\Favicon\Commands;
 
 use DOMDocument;
 use Exception;
@@ -36,11 +36,12 @@ class GenerateFaviconImagesCommand extends Command
         $this->info('Start creating Favicons...');
 
         $pngPath = $this->option('png');
+        $imagePath = public_path($pngPath);
 
         try {
-            $imgFile = Image::make(public_path($pngPath));
+            $imgFile = Image::make($imagePath);
         } catch (Exception $e) {
-            $this->error('Opps, looks like that is not a valid .png');
+            $this->error("[{$imagePath}] is not a valid .png");
 
             return;
         }
@@ -120,11 +121,9 @@ class GenerateFaviconImagesCommand extends Command
             json_encode($siteWebmanifestJson, JSON_PRETTY_PRINT),
         );
 
-        // favicon.ico
-
-        if ($svg = $this->option('svg')) {
+        if (File::exists(public_path($this->option('svg')))) {
             $dom = new DOMDocument('1.0', 'utf-8');
-            $dom->load(public_path($svg));
+            $dom->load(public_path($this->option('svg')));
             $svg = $dom->documentElement;
 
             $svg->setAttribute('width', '16');

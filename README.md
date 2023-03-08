@@ -21,6 +21,17 @@ php artisan vendor:publish --provider="Chriscreates\Favicon\Providers\FaviconSer
 
 ## Usage
 
+Place a .png image into your /public directory.
+Variations sizes of this image will be created.
+
+Into your base layout file:
+
+```php
+@include('favicon::meta')
+```
+
+To generate favicons:
+
 ```bash
 php aritsan favicon:generate
 ```

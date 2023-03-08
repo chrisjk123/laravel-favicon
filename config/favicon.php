@@ -24,4 +24,10 @@ return [
 
     ],
 
+    /**
+     * Environment for which to show the favicon on.
+     */
+
+    'environments' => ['staging', 'production'],
+
 ];

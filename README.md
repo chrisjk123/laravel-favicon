@@ -5,6 +5,11 @@
 [![MIT Licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.md)
 ![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/chrisjk123/laravel-favicon/run-tests?style=flat&label=tests)
 
+## Requirements
+
+- PHP 8.2 or higher
+- Laravel 10.0 or 11.0
+
 ## Installation
 
 You can install the package via composer:

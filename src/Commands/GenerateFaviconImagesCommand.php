@@ -6,7 +6,8 @@ use DOMDocument;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class GenerateFaviconImagesCommand extends Command
 {
@@ -39,60 +40,33 @@ class GenerateFaviconImagesCommand extends Command
         $imagePath = public_path($pngPath);
 
         try {
-            $imgFile = Image::make($imagePath);
+            $manager = new ImageManager(new Driver());
+            $manager->read($imagePath);
         } catch (Exception $e) {
             $this->error("[{$imagePath}] is not a valid .png");
 
             return;
         }
 
-        $imgFile->resize(192, 192, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('android-chrome-192x192.png'));
+        $sizes = [
+            'android-chrome-192x192.png' => [192, 192],
+            'android-chrome-384x384.png' => [384, 384],
+            'android-chrome-512x512.png' => [512, 512],
+            'apple-touch-icon.png' => [180, 180],
+            'favicon-16x16.png' => [16, 16],
+            'favicon-32x32.png' => [32, 32],
+            'favicon-48x48.png' => [48, 48],
+            'mstile-70x70.png' => [70, 70],
+            'mstile-150x150.png' => [150, 150],
+            'mstile-310x150.png' => [310, 150],
+            'mstile-310x310.png' => [310, 310],
+        ];
 
-        $imgFile->resize(384, 384, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('android-chrome-384x384.png'));
-
-        $imgFile->resize(512, 512, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('android-chrome-512x512.png'));
-
-        $imgFile->resize(180, 180, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('apple-touch-icon.png'));
-
-        $imgFile->resize(16, 16, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('favicon-16x16.png'));
-
-        $imgFile->resize(32, 32, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('favicon-32x32.png'));
-
-        $imgFile->resize(48, 48, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('favicon-48x48.png'));
-
-        $imgFile->resize(70, 70, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('mstile-70x70.png'));
-
-        $imgFile->resize(150, 150, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('mstile-150x150.png'));
-
-        $imgFile->resize(150, 150, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('mstile-150x150.png'));
-
-        $imgFile->resize(310, 150, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('mstile-310x150.png'));
-
-        $imgFile->resize(310, 310, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save(public_path('mstile-310x310.png'));
+        foreach ($sizes as $filename => [$width, $height]) {
+            $manager->read($imagePath)
+                ->scale($width, $height)
+                ->save(public_path($filename));
+        }
 
         $siteWebmanifestConfig = config()->get('favicon.site-webmanifest');
 
